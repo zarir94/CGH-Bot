@@ -1,5 +1,5 @@
 from requests import get, post
-from flask import Flask
+from flask import Flask, request
 from threading import Thread
 from base64 import b64decode
 from time import sleep
@@ -77,14 +77,22 @@ t.start()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisIsMySecretKeyOK'
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == "POST":
+        import sys
+        sys.exit()
+        
     return f"""
         <h3>Circle CI Bot Running: {check_circle_run()}</h3>
         <h3>Github Bot 1 Running: {check_gh_run(1)}</h3>
         <h3>Github Bot 2 Running: {check_gh_run(2)}</h3>
         <br>
         <a href="/log">View Log</a>
+        <br>
+        <form method="POST">
+        <button type="submit">Exit Server and Restart<button>
+        </form>
     """
 
 @app.route('/log')
