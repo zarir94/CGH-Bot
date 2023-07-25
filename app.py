@@ -99,11 +99,11 @@ t.start()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisIsMySecretKeyOK'
+tag_meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return f"""
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    return f"""{tag_meta}
         <h3>Circle CI Bot Running: {info['c1']}</h3>
         <h3>Github Bot 1 Running: {info['g1']}</h3>
         <h3>Github Bot 2 Running: {info['g2']}</h3>
@@ -118,8 +118,8 @@ def home():
 @app.route('/log')
 def log_view():
     if info['log'] == '':
-        return 'Log is Empty'
-    return info['log'].replace('\n', '<br>')
+        return tag_meta + '<h3>Log is Empty</h3>'
+    return tag_meta + info['log'].replace('\n', '<br>')
 
 
 if __name__ == '__main__':
