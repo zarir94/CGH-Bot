@@ -2,18 +2,22 @@ from requests import get, post
 from flask import Flask, request
 from threading import Thread
 from base64 import b64decode
-from time import sleep
+from time import sleep, time
+import traceback
 
 
 C_TOKEN = "CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724"
 G_TOKEN_B64 = b'Z2hwX1loZ2J1RlBlYnhtc3ZsckV6WkdPWWFRTmNWbDNDVzNBbThsVQ=='
 G_TOKEN = b64decode(G_TOKEN_B64).decode()
-info = {'log':''}
+info = {'log':'','last_check': time(),'c1':False,'g1':False,'g2':False}
 
 
 def check_gh_run(no:int = 1):
-    resp = get(f"https://api.github.com/repos/msh1997-rahino/Link-{no}/actions/runs?per_page=1")
-    wr = resp.json()['workflow_runs'][0]
+    resp = get(f"https://api.github.com/repos/msh1997-rahino/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
+    try:
+        wr = resp.json()['workflow_runs'][0]
+    except:
+        raise Exception('Error at check_gh_run - wr:\n'+resp.text)
     if wr['status'] != 'completed':
         return True
     else:
@@ -41,7 +45,7 @@ def run_gh(no:int = 1):
         data='{"ref":"main","inputs":{"count":"0"}}'
     )
     if resp.status_code != 204:
-        info['log'] += resp.text + "\n\n\n"
+        info['log'] += 'Error at run_gh status_code:\n' + resp.text + "\n\n\n"
         return False
     return True
 
@@ -59,14 +63,33 @@ def run_circle():
         info['log'] += resp.text + "\n\n\n"
         return False
     return True
+    
+
+def seconds_to_time(seconds):
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    remaining_seconds = int(seconds % 60)
+
+    if hours == 0:
+        return f"{minutes}m {remaining_seconds}s"
+    else:
+        return f"{hours}h {minutes}m {remaining_seconds}s"
 
 
 def thread_func():
     while True:
-        if not check_circle_run(): run_circle()
-        if not check_gh_run(1): run_gh(1)
-        if not check_gh_run(2): run_gh(2)
-        sleep(60)
+        try:
+            if not check_circle_run(): run_circle()
+            if not check_gh_run(1): run_gh(1)
+            if not check_gh_run(2): run_gh(2)
+            sleep(10)
+            info['c1']=check_circle_run()
+            info['g1']=check_gh_run(1)
+            info['g2']=check_gh_run(2)
+            info['last_check']=time()
+        except:
+            info['log']+=traceback.format_exc() + '\n\n\n'
+        sleep(110)
 
 
 t=Thread(target=thread_func)
@@ -79,24 +102,23 @@ app.config['SECRET_KEY'] = 'thisIsMySecretKeyOK'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == "POST":
-        import sys
-        sys.exit()
-        
     return f"""
-        <h3>Circle CI Bot Running: {check_circle_run()}</h3>
-        <h3>Github Bot 1 Running: {check_gh_run(1)}</h3>
-        <h3>Github Bot 2 Running: {check_gh_run(2)}</h3>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <h3>Circle CI Bot Running: {info['c1']}</h3>
+        <h3>Github Bot 1 Running: {info['g1']}</h3>
+        <h3>Github Bot 2 Running: {info['g2']}</h3>
+        <p><span style="color:red;">Note:</span> If the CI Bot is manually cancelled/stopped, then it will be count as running. Only failed CI/Bot will set as running = False.</p>
+        <br>
+        <h3>Last Checked: {seconds_to_time(time() - info['last_check'])} ago</h3>
         <br>
         <a href="/log">View Log</a>
         <br>
-        <form method="POST">
-        <button type="submit">Exit Server and Restart<button>
-        </form>
     """
 
 @app.route('/log')
 def log_view():
+    if info['log'] == '':
+        return 'Log is Empty'
     return info['log'].replace('\n', '<br>')
 
 
