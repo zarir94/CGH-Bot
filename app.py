@@ -26,10 +26,10 @@ def check_gh_run(no:int = 1):
         return False
 
 def check_circle_run():
-    resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/V2Links-Bot/pipeline", headers={"Circle-Token":  C_TOKEN})
+    resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/pipeline", headers={"Circle-Token":  C_TOKEN})
     last_no = resp.json()['items'][0]['number']
     diff = 4
-    resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/V2Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
+    resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
     wr = resp.json()['status']
     return wr != 'failed'
 
@@ -50,7 +50,7 @@ def run_gh(no:int = 1):
     return True
 
 def run_circle():
-    owner_and_repo = "github/dev-zarir/V2Links-Bot"
+    owner_and_repo = "github/dev-zarir/Links-Bot"
     resp = post(
         f"https://circleci.com/api/v2/project/{owner_and_repo}/pipeline",
         headers={
