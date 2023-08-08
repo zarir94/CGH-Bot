@@ -7,13 +7,13 @@ import traceback
 
 
 C_TOKEN = "CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724"
-G_TOKEN_B64 = b'Z2hwX1loZ2J1RlBlYnhtc3ZsckV6WkdPWWFRTmNWbDNDVzNBbThsVQ=='
+G_TOKEN_B64 = b'Z2hwX1JvUFVlVlkwbmxNaGQ2SFl4SmtPeDdPZzVFV25wSjNWQkdacg=='
 G_TOKEN = b64decode(G_TOKEN_B64).decode()
 info = {'log':'','last_check': time(),'c1':False,'g1':False,'g2':False}
 
 
 def check_gh_run(no:int = 1):
-    resp = get(f"https://api.github.com/repos/msh1997-rahino/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
+    resp = get(f"https://api.github.com/repos/linkermanpy/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
     try:
         wr = resp.json()['workflow_runs'][0]
     except:
@@ -34,7 +34,7 @@ def check_circle_run():
     return wr != 'failed'
 
 def run_gh(no:int = 1):
-    owner_and_repo = f"msh1997-rahino/Link-{no}"
+    owner_and_repo = f"linkermanpy/Link-{no}"
     resp = post(
         f"https://api.github.com/repos/{owner_and_repo}/actions/workflows/Job.yml/dispatches",
         headers={
