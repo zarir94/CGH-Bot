@@ -7,10 +7,10 @@ import traceback
 
 
 C_TOKEN = "CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724"
-G_TOKEN_B64 = b'Z2hwX3JUNnJSbHJ3OUJOTTBWM25QTmJWWWViU3BqaHh1MTRSTkZTNA=='
+G_TOKEN_B64 = b'Z2hwX3VTWlJ5ZDBFNFdqR0hKZFFtYlNrNmQ4MUE1YVZIazNrbjZWcg=='
 G_TOKEN = b64decode(G_TOKEN_B64).decode()
 info = {'log':'','last_check': time(),'c1':False,'g1':False,'g2':False}
-G_USER = 'ak47be'
+G_USER = 'sdk16pubg'
 
 def check_gh_run(no:int = 1):
     resp = get(f"https://api.github.com/repos/{G_USER}/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
