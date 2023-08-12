@@ -13,56 +13,72 @@ info = {'log':'','last_check': time(),'c1':False,'g1':False,'g2':False}
 G_USER = 'sdk16pubg'
 
 def check_gh_run(no:int = 1):
-    resp = get(f"https://api.github.com/repos/{G_USER}/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
     try:
-        wr = resp.json()['workflow_runs'][0]
-    except:
-        raise Exception('Error at check_gh_run - wr:\n'+resp.text)
-    if wr['status'] != 'completed':
-        return True
-    else:
-        if wr['conclusion'] == 'cancelled':
+        resp = get(f"https://api.github.com/repos/{G_USER}/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
+        try:
+            wr = resp.json()['workflow_runs'][0]
+        except:
+            raise Exception('Error at check_gh_run - wr:\n'+resp.text)
+        if wr['status'] != 'completed':
             return True
-        return False
+        else:
+            if wr['conclusion'] == 'cancelled':
+                return True
+            return False
+    except:
+        info['log']+=traceback.format_exc() + '\n\n\n'
+        return None
 
 def check_circle_run():
-    resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/pipeline", headers={"Circle-Token":  C_TOKEN})
-    last_no = resp.json()['items'][0]['number']
-    diff = 4
-    resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
-    wr = resp.json()['status']
-    return wr != 'failed'
+    try:
+        resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/pipeline", headers={"Circle-Token":  C_TOKEN})
+        last_no = resp.json()['items'][0]['number']
+        diff = 4
+        resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
+        wr = resp.json()['status']
+        return wr != 'failed'
+    except:
+        info['log']+=traceback.format_exc() + '\n\n\n'
+        return None
 
 def run_gh(no:int = 1):
-    owner_and_repo = f"{G_USER}/Link-{no}"
-    resp = post(
-        f"https://api.github.com/repos/{owner_and_repo}/actions/workflows/Job.yml/dispatches",
-        headers={
-            "Accept": "application/vnd.github+json",
-            "Authorization":  f"Bearer {G_TOKEN}",
-            "Content-Type": "application/json"
-        },
-        data='{"ref":"main","inputs":{"count":"0"}}'
-    )
-    if resp.status_code != 204:
-        info['log'] += 'Error at run_gh status_code:\n' + resp.text + "\n\n\n"
-        return False
-    return True
+    try:
+        owner_and_repo = f"{G_USER}/Link-{no}"
+        resp = post(
+            f"https://api.github.com/repos/{owner_and_repo}/actions/workflows/Job.yml/dispatches",
+            headers={
+                "Accept": "application/vnd.github+json",
+                "Authorization":  f"Bearer {G_TOKEN}",
+                "Content-Type": "application/json"
+            },
+            data='{"ref":"main","inputs":{"count":"0"}}'
+        )
+        if resp.status_code != 204:
+            info['log'] += 'Error at run_gh status_code:\n' + resp.text + "\n\n\n"
+            return False
+        return True
+    except:
+        info['log']+=traceback.format_exc() + '\n\n\n'
+        return None
 
 def run_circle():
-    owner_and_repo = f"github/{G_USER}/Links-Bot"
-    resp = post(
-        f"https://circleci.com/api/v2/project/{owner_and_repo}/pipeline",
-        headers={
-            "Circle-Token": C_TOKEN,
-            "Content-Type": "application/json"
-        },
-        data='{"branch":"main","parameters":{"count":"0"}}'
-    )
-    if resp.status_code != 201:
-        info['log'] += resp.text + "\n\n\n"
-        return False
-    return True
+    try:
+        owner_and_repo = f"github/{G_USER}/Links-Bot"
+        resp = post(
+            f"https://circleci.com/api/v2/project/{owner_and_repo}/pipeline",
+            headers={
+                "Circle-Token": C_TOKEN,
+                "Content-Type": "application/json"
+            },
+            data='{"branch":"main","parameters":{"count":"0"}}'
+        )
+        if resp.status_code != 201:
+            info['log'] += resp.text + "\n\n\n"
+            return False
+        return True
+    except:
+        info['log']+=traceback.format_exc() + '\n\n\n'
+        return None
     
 
 def seconds_to_time(seconds):
@@ -124,4 +140,3 @@ def log_view():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 80, True)
-
