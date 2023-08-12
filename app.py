@@ -63,7 +63,7 @@ def run_gh(no:int = 1):
 
 def run_circle():
     try:
-        owner_and_repo = f"github/{G_USER}/Links-Bot"
+        owner_and_repo = f"github/dev-zarir/Links-Bot"
         resp = post(
             f"https://circleci.com/api/v2/project/{owner_and_repo}/pipeline",
             headers={
