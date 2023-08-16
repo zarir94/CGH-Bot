@@ -33,10 +33,13 @@ def check_circle_run():
     try:
         resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/pipeline", headers={"Circle-Token":  C_TOKEN})
         last_no = resp.json()['items'][0]['number']
-        diff = 4
-        resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
-        wr = resp.json()['status']
-        return wr != 'failed'
+        for diff in range(4,16):
+            try:
+                resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
+                wr = resp.json()['status']
+                return wr != 'failed'
+            except KeyError:
+                continue
     except:
         info['log']+=traceback.format_exc() + '\n\n\n'
         return None
