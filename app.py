@@ -108,7 +108,8 @@ def thread_func():
             i=1
             for usr in list(all_tokens):
                 if not info[f'c{i}']:
-                    info[f'c{i}']=run_circle(usr)
+                    if not check_circle_run(usr):
+                        info[f'c{i}']=run_circle(usr)
                 i+=1
             info['last_check']=time()
         except:
