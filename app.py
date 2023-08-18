@@ -6,11 +6,14 @@ from time import sleep, time
 import traceback
 
 
-C_TOKEN = "CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724"
-G_TOKEN_B64 = b'Z2hwX3VTWlJ5ZDBFNFdqR0hKZFFtYlNrNmQ4MUE1YVZIazNrbjZWcg=='
-G_TOKEN = b64decode(G_TOKEN_B64).decode()
-info = {'log':'','last_check': time(),'c1':False,'g1':False,'g2':False}
-G_USER = 'sdk16pubg'
+all_tokens = {
+    'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
+    'makhatun204' : 'CCIPAT_CDqH8Y8sCHan79JyX2Htsn_8cdb7ae29215ed1b98a8d68b99b0fad941db21bd',
+    'szharir0' : 'CCIPAT_9yW7eCqKY2kJ6voJ1481PT_43b8e501e3237f32aade959507b6e67069bee241'
+}
+
+info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False}
+
 
 def check_gh_run(no:int = 1):
     try:
@@ -29,13 +32,13 @@ def check_gh_run(no:int = 1):
         info['log']+=traceback.format_exc() + '\n\n\n'
         return None
 
-def check_circle_run():
+def check_circle_run(usr):
     try:
-        resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/pipeline", headers={"Circle-Token":  C_TOKEN})
+        resp = get(f"https://circleci.com/api/v2/project/github/{usr}/Links-Bot/pipeline", headers={"Circle-Token":  all_tokens.get(usr)})
         last_no = resp.json()['items'][0]['number']
-        for diff in range(4,16):
+        for diff in range(0,16):
             try:
-                resp = get(f"https://circleci.com/api/v2/project/github/dev-zarir/Links-Bot/job/{last_no - diff}", headers={"Circle-Token":  C_TOKEN})
+                resp = get(f"https://circleci.com/api/v2/project/github/{usr}/Links-Bot/job/{last_no - diff}", headers={"Circle-Token": all_tokens.get(usr)})
                 wr = resp.json()['status']
                 return wr != 'failed'
             except KeyError:
@@ -64,13 +67,12 @@ def run_gh(no:int = 1):
         info['log']+=traceback.format_exc() + '\n\n\n'
         return None
 
-def run_circle():
+def run_circle(usr):
     try:
-        owner_and_repo = f"github/dev-zarir/Links-Bot"
         resp = post(
-            f"https://circleci.com/api/v2/project/{owner_and_repo}/pipeline",
+            f"https://circleci.com/api/v2/project/github/{usr}/Links-Bot/pipeline",
             headers={
-                "Circle-Token": C_TOKEN,
+                "Circle-Token": all_tokens.get(usr),
                 "Content-Type": "application/json"
             },
             data='{"branch":"main","parameters":{"count":"0"}}'
@@ -98,13 +100,16 @@ def seconds_to_time(seconds):
 def thread_func():
     while True:
         try:
-            if not check_circle_run(): run_circle()
-            if not check_gh_run(1): run_gh(1)
-            if not check_gh_run(2): run_gh(2)
+            i=1
+            for usr in list(all_tokens):
+                info[f'c{i}'] = check_circle_run(usr)
+                i+=1
             sleep(10)
-            info['c1']=check_circle_run()
-            info['g1']=check_gh_run(1)
-            info['g2']=check_gh_run(2)
+            i=1
+            for usr in list(all_tokens):
+                if not info[f'c{i}']:
+                    info[f'c{i}']=run_circle(usr)
+                i+=1
             info['last_check']=time()
         except:
             info['log']+=traceback.format_exc() + '\n\n\n'
@@ -123,9 +128,9 @@ tag_meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return f"""{tag_meta}
-        <h3>Circle CI Bot Running: {info['c1']}</h3>
-        <h3>Github Bot 1 Running: {info['g1']}</h3>
-        <h3>Github Bot 2 Running: {info['g2']}</h3>
+        <h3>Circle CI Bot 1 Running: {info['c1']}</h3>
+        <h3>Circle CI Bot 2 Running: {info['c2']}</h3>
+        <h3>Circle CI Bot 3 Running: {info['c3']}</h3>
         <p><span style="color:red;">Note:</span> If the CI Bot is manually cancelled/stopped, then it will be count as running. Only failed CI/Bot will set as running = False.</p>
         <br>
         <h3>Last Checked: {seconds_to_time(time() - info['last_check'])} ago</h3>
