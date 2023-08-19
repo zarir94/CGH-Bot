@@ -11,7 +11,9 @@ all_tokens = {
     'makhatun204' : 'CCIPAT_CDqH8Y8sCHan79JyX2Htsn_8cdb7ae29215ed1b98a8d68b99b0fad941db21bd',
     'szharir0' : 'CCIPAT_9yW7eCqKY2kJ6voJ1481PT_43b8e501e3237f32aade959507b6e67069bee241'
 }
-G_TOKEN = b64decode('Z2hwXzZVb012S1diNXVzOURkazc5eGJoRktMc3lXcEtOTDN5UEVDVw==').decode()
+
+enc_tok = b'Z2hwX0lXQXlpMUxkTlhXbWFEa0tPYm1RT2RKMVBncG9FbzRBUXdNdQ=='
+G_TOKEN = b64decode(enc_tok).decode()
 G_USER = 'szharir0'
 info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False, 'g1':False}
 
@@ -136,6 +138,7 @@ def home():
         <h3>Circle CI Bot 1 Running: {info['c1']}</h3>
         <h3>Circle CI Bot 2 Running: {info['c2']}</h3>
         <h3>Circle CI Bot 3 Running: {info['c3']}</h3>
+        <h3>Github Bot 1 Running: {info['g1']}</h3>
         <p><span style="color:red;">Note:</span> If the CI Bot is manually cancelled/stopped, then it will be count as running. Only failed CI/Bot will set as running = False.</p>
         <br>
         <h3>Last Checked: {seconds_to_time(time() - info['last_check'])} ago</h3>
