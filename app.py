@@ -11,13 +11,14 @@ all_tokens = {
     'makhatun204' : 'CCIPAT_CDqH8Y8sCHan79JyX2Htsn_8cdb7ae29215ed1b98a8d68b99b0fad941db21bd',
     'szharir0' : 'CCIPAT_9yW7eCqKY2kJ6voJ1481PT_43b8e501e3237f32aade959507b6e67069bee241'
 }
-
-info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False}
+G_TOKEN = b64decode('Z2hwXzZVb012S1diNXVzOURkazc5eGJoRktMc3lXcEtOTDN5UEVDVw==').decode()
+G_USER = 'szharir0'
+info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False, 'g1':False}
 
 
 def check_gh_run(no:int = 1):
     try:
-        resp = get(f"https://api.github.com/repos/{G_USER}/Link-{no}/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
+        resp = get(f"https://api.github.com/repos/{G_USER}/Links-Bot/actions/runs?per_page=1", headers={"Authorization": f"Bearer {G_TOKEN}"})
         try:
             wr = resp.json()['workflow_runs'][0]
         except:
@@ -49,7 +50,7 @@ def check_circle_run(usr):
 
 def run_gh(no:int = 1):
     try:
-        owner_and_repo = f"{G_USER}/Link-{no}"
+        owner_and_repo = f"{G_USER}/Links-Bot"
         resp = post(
             f"https://api.github.com/repos/{owner_and_repo}/actions/workflows/Job.yml/dispatches",
             headers={
@@ -111,6 +112,9 @@ def thread_func():
                     if not check_circle_run(usr):
                         info[f'c{i}']=run_circle(usr)
                 i+=1
+            info['g1'] = check_gh_run()
+            if info['g1'] == False:
+                info['g1']=run_gh()
             info['last_check']=time()
         except:
             info['log']+=traceback.format_exc() + '\n\n\n'
