@@ -12,8 +12,7 @@ all_tokens = {
     'szharir0' : 'CCIPAT_9yW7eCqKY2kJ6voJ1481PT_43b8e501e3237f32aade959507b6e67069bee241'
 }
 
-enc_tok = b'Z2hwX0lXQXlpMUxkTlhXbWFEa0tPYm1RT2RKMVBncG9FbzRBUXdNdQ=='
-G_TOKEN = b64decode(enc_tok).decode()
+G_TOKEN = get('https://pastebin.com/raw/uB9SLeK7').text
 G_USER = 'szharir0'
 info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False, 'g1':False}
 
