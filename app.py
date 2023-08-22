@@ -9,11 +9,11 @@ import traceback
 all_tokens = {
     'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
     'makhatun204' : 'CCIPAT_CDqH8Y8sCHan79JyX2Htsn_8cdb7ae29215ed1b98a8d68b99b0fad941db21bd',
-    'szharir0' : 'CCIPAT_9yW7eCqKY2kJ6voJ1481PT_43b8e501e3237f32aade959507b6e67069bee241'
+    'jskpg2019' : 'CCIPAT_5dN99379pRkoGgPZGeebEk_5be704f48cef525073f773a9c355d740ae581e6d'
 }
 
-G_TOKEN = get('https://pastebin.com/raw/CZpqAxav').text
-G_USER = 'makhatun204'
+G_TOKEN = get('https://pastebin.com/raw/8EC9XUc0').text
+G_USER = 'jskpg2019'
 info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False, 'g1':False}
 
 
