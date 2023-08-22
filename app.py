@@ -12,8 +12,8 @@ all_tokens = {
     'szharir0' : 'CCIPAT_9yW7eCqKY2kJ6voJ1481PT_43b8e501e3237f32aade959507b6e67069bee241'
 }
 
-G_TOKEN = get('https://pastebin.com/raw/uB9SLeK7').text
-G_USER = 'szharir0'
+G_TOKEN = get('https://pastebin.com/raw/CZpqAxav').text
+G_USER = 'makhatun204'
 info = {'log':'','last_check': time(),'c1':False,'c2':False,'c3':False, 'g1':False}
 
 
