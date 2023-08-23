@@ -8,12 +8,12 @@ import traceback
 
 all_ci_tokens = {
     'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
-    #'perfect3673' : '',
+    'tzstorage23' : 'CCIPAT_HNJSHVYPAnpRNZxSHBT2zM_acb326c9ec0968def44c06812a9c94a2b46ad4f1',
     'jskpg2019' : 'CCIPAT_5dN99379pRkoGgPZGeebEk_5be704f48cef525073f773a9c355d740ae581e6d'
 }
 all_gh_tokens = {
     'jskpg2019': get('https://pastebin.com/raw/8EC9XUc0').text,
-    'perfect3673': get('https://pastebin.com/raw/aCx883rL').text,
+    'tzstorage23': get('https://pastebin.com/raw/gS5hMGT7').text,
 }
 
 info = {'log':'','last_check': time()}
