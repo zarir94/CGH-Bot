@@ -8,12 +8,10 @@ import traceback
 
 all_ci_tokens = {
     'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
-    'alamalam192' : 'CCIPAT_5WX6ZCSaJRk9TrXDQKap7M_29158880c8f8dcd4e5ce3566da4bd8938a70d76b',
-    'shortmusic193' : 'CCIPAT_6YD3dDJWuzBFfq19vDZVV6_2287fea4d28a22f08473f7729534706297230ade'
+    'imgtotext-pygo' : 'CCIPAT_U29wtrQv7yfrL4xdoBzkLm_3d23b95770f8a8226695fb7dfbe915b3b50ce31b'
 }
 all_gh_tokens = {
-    'alamalam192': get('https://pastebin.com/raw/pwTsK2zz').text,
-    'shortmusic193': get('https://pastebin.com/raw/EecQiVkv').text,
+    'imgtotext-pygo': get('https://pastebin.com/raw/WP0tf9t7').text,
 }
 
 info = {'log':'','last_check': time()}
