@@ -8,10 +8,10 @@ import traceback
 
 all_ci_tokens = {
     'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
-    'pyappnobounce' : 'CCIPAT_Aa49uU2whPqmJ4X8aiQ4QK_139ac273901fa6f54ec64dd0f90166f1053c1d1f'
+    'jejs920' : 'CCIPAT_R2f3ftEp4gseXKbmwyC8F8_ca850850e30bc994e256cfd16f37fb3f322c316b'
 }
 all_gh_tokens = {
-    'pyappnobounce': get('https://pastebin.com/raw/Um40T7Lk').text,
+    'jejs920': get('https://pastebin.com/raw/QHqBCrNr').text,
 }
 
 info = {'log':'','last_check': time()}
