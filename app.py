@@ -8,10 +8,10 @@ import traceback
 
 all_ci_tokens = {
     'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
-    'jerryissan283' : 'CCIPAT_5DXz5nfLfFv4fNkjDrBRxV_985f8160da30e717f7f58ddedd3dbc6e900f75a6'
+    'abdah0381' : 'CCIPAT_FUVRyieRjpq7vF3mzrSrJ_1c08c98ce219c819da3ff5d68f5bb11a99d62b3d'
 }
 all_gh_tokens = {
-    'jerryissan283': get('https://pastebin.com/raw/4JWMP1uQ').text,
+    'abdah0381': get('https://pastebin.com/raw/8hVQW5ju').text,
 }
 
 info = {'log':'','last_check': time()}
