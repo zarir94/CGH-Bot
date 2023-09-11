@@ -8,6 +8,8 @@ import traceback
 
 
 info = {'log':'','last_check': time()}
+all_gh_tokens = all_ci_tokens ={}
+
 
 def check_gh_run(usr):
     try:
@@ -91,6 +93,8 @@ def seconds_to_time(seconds):
 
 
 def thread_func():
+    global all_ci_tokens
+    global all_gh_tokens
     while True:
         try:
             raw = get('https://pastebin.com/raw/jHWc7wVF').text
