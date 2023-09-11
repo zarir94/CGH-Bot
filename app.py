@@ -1,18 +1,11 @@
 from requests import get, post
+from json import loads
 from flask import Flask, request
 from threading import Thread
 from base64 import b64decode
 from time import sleep, time
 import traceback
 
-
-all_ci_tokens = {
-    'dev-zarir' : 'CCIPAT_166iZ4GwAPFg1h5VqhDrwA_1b03b68d725c3fde91c5ae797f5f91ff3bafc724',
-    'abdah0381' : 'CCIPAT_FUVRyieRjpq7vF3mzrSrJ_1c08c98ce219c819da3ff5d68f5bb11a99d62b3d'
-}
-all_gh_tokens = {
-    'abdah0381': get('https://pastebin.com/raw/8hVQW5ju').text,
-}
 
 info = {'log':'','last_check': time()}
 
@@ -100,6 +93,10 @@ def seconds_to_time(seconds):
 def thread_func():
     while True:
         try:
+            raw = get('https://pastebin.com/raw/jHWc7wVF').text
+            json_raw = loads(raw)
+            all_ci_tokens = json_raw['CI']
+            all_gh_tokens = json_raw['GH']
             i=1
             for usr in list(all_ci_tokens):
                 info[f'c{i}'] = check_circle_run(usr)
