@@ -95,9 +95,18 @@ def seconds_to_time(seconds):
 def thread_func():
     global all_ci_tokens
     global all_gh_tokens
+    old_raw = ''
     while True:
         try:
             raw = get('https://pastebin.com/raw/jHWc7wVF').text
+            if old_raw != raw:
+                old_raw = raw
+                info['log']=''
+                for key, value in info.items():
+                    if 'l' not in key:
+                        if 'c' in key or 'g' in key:
+                            del info[key]
+                            
             json_raw = loads(raw)
             all_ci_tokens = json_raw['CI']
             all_gh_tokens = json_raw['GH']
