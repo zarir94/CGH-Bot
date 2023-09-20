@@ -102,7 +102,7 @@ def thread_func():
             if old_raw != raw:
                 old_raw = raw
                 info['log']=''
-                for key, value in info.items():
+                for key, value in list(info.items()):
                     if 'l' not in key:
                         if 'c' in key or 'g' in key:
                             del info[key]
