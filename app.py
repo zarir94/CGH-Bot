@@ -13,7 +13,7 @@ all_gh_tokens = all_ci_tokens ={}
 
 def check_gh_run(usr):
     try:
-        resp = get(f"https://api.github.com/repos/{usr}/Links-Bot/actions/runs?per_page=1", headers={"Authorization": f"Bearer {all_gh_tokens.get(usr)}"})
+        resp = get(f"https://api.github.com/repos/{usr}/URL-Bot/actions/runs?per_page=1", headers={"Authorization": f"Bearer {all_gh_tokens.get(usr)}"})
         try:
             wr = resp.json()['workflow_runs'][0]
         except:
@@ -30,11 +30,11 @@ def check_gh_run(usr):
 
 def check_circle_run(usr):
     try:
-        resp = get(f"https://circleci.com/api/v2/project/github/{usr}/Links-Bot/pipeline", headers={"Circle-Token":  all_ci_tokens.get(usr)})
+        resp = get(f"https://circleci.com/api/v2/project/github/{usr}/URL-Bot/pipeline", headers={"Circle-Token":  all_ci_tokens.get(usr)})
         last_no = resp.json()['items'][0]['number']
         for diff in range(0,16):
             try:
-                resp = get(f"https://circleci.com/api/v2/project/github/{usr}/Links-Bot/job/{last_no - diff}", headers={"Circle-Token": all_ci_tokens.get(usr)})
+                resp = get(f"https://circleci.com/api/v2/project/github/{usr}/URL-Bot/job/{last_no - diff}", headers={"Circle-Token": all_ci_tokens.get(usr)})
                 wr = resp.json()['status']
                 return wr != 'failed'
             except KeyError:
@@ -46,7 +46,7 @@ def check_circle_run(usr):
 def run_gh(usr):
     try:
         resp = post(
-            f"https://api.github.com/repos/{usr}/Links-Bot/actions/workflows/Job.yml/dispatches",
+            f"https://api.github.com/repos/{usr}/URL-Bot/actions/workflows/Job.yml/dispatches",
             headers={
                 "Accept": "application/vnd.github+json",
                 "Authorization":  f"Bearer {all_gh_tokens.get(usr)}",
@@ -65,7 +65,7 @@ def run_gh(usr):
 def run_circle(usr):
     try:
         resp = post(
-            f"https://circleci.com/api/v2/project/github/{usr}/Links-Bot/pipeline",
+            f"https://circleci.com/api/v2/project/github/{usr}/URL-Bot/pipeline",
             headers={
                 "Circle-Token": all_ci_tokens.get(usr),
                 "Content-Type": "application/json"
